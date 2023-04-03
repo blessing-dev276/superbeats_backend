@@ -52,8 +52,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party libraries
     "rest_framework_simplejwt",
+    "drf_social_oauth2",
+    "oauth2_provider",
     "rest_framework",
     "django_filters",
+    "social_django",
     "corsheaders",
     "drf_stripe",
     "drf_yasg",
@@ -90,6 +93,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -239,13 +244,18 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", str, "")
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", str, "")
 
+# jwt configuration for drf-social-oauth2
+
+ACTIVATE_JWT = True
 
 AUTHENTICATION_BACKENDS = [
-    # "social_core.backends.facebook.FacebookAppOAuth2",
+    "social_core.backends.facebook.FacebookAppOAuth2",
     # # ...
-    # "social_core.backends.facebook.FacebookOAuth2",
+    "social_core.backends.facebook.FacebookOAuth2",
     # # ...
-    # "social_core.backends.google.GoogleOAuth2",
+    "social_core.backends.google.GoogleOAuth2",
+    # ...
+    "drf_social_oauth2.backends.DjangoOAuth2",
     # ...
     "server.backends.CustomAuthBackend",
     # ...
@@ -291,7 +301,9 @@ REST_FRAMEWORK = {
     #  ...
     "DEFAULT_AUTHENTICATION_CLASSES": [
         # ...
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
+        "drf_social_oauth2.authentication.SocialAuthentication",
         # ...
     ],
     #  ...
