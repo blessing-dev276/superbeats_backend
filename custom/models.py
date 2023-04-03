@@ -62,5 +62,5 @@ class Recent(m.GenericModel):
 
 class Tip(m.GenericModel):
     description = models.TextField()
-    image = models.URLField(blank=True)
+    image = models.URLField(blank=True, null=True)
     user = models.ForeignKey(get_user_model(), models.CASCADE, related_name="tips")

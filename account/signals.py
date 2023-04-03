@@ -31,7 +31,7 @@ def create_user_stripe_account(sender, instance, created, *args, **kwargs):
         try:
             get_or_create_stripe_user(instance)
         except Exception as e:
-            print(e, "failed to delete user stripe data")
+            print(e, "failed to create user stripe data")
 
 
 @receiver(signals.post_delete, sender=get_user_model())
