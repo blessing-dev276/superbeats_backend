@@ -52,7 +52,7 @@ class Rating(m.GenericModel):
 
 
 class Recent(m.GenericModel):
-    times = models.PositiveIntegerField()
+    times = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(get_user_model(), models.CASCADE, related_name="recents")
 
     def save(self, *args, **kwargs):
@@ -62,4 +62,5 @@ class Recent(m.GenericModel):
 
 class Tip(m.GenericModel):
     description = models.TextField()
+    image = models.URLField(blank=True)
     user = models.ForeignKey(get_user_model(), models.CASCADE, related_name="tips")

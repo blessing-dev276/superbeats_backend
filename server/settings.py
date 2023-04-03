@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # my custom apps
     "account.apps.AccountConfig",
     "custom.apps.CustomConfig",
+    'recipe.apps.RecipeConfig',
 ]
 
 MIDDLEWARE = [
@@ -187,17 +188,17 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # email configuration
 
-EMAIL_PORT = 587
-
 EMAIL_USE_TLS = True
+
+EMAIL_PORT = ('EMAIL_PORT',int, 587)
+
+EMAIL_HOST = env("EMAIL_HOST", str, "localhost")
 
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", str, "")
 
 DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER", str, "")
 
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", str, "")
-
-EMAIL_HOST = env("EMAIL_HOST", str, "smtp-relay.sendinblue.com")
 
 # custom configuration
 

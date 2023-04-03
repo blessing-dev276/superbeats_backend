@@ -22,7 +22,7 @@ schema_view = views.get_schema_view(
     ),
 )
 
-api, url = ["account", "custom"], ["account", "custom"]
+api, url = ["account", "custom", "recipe"], ["account", "custom", "recipe"]
 
 urlpatterns = [
     path("admin/", admin.site.urls),
