@@ -1,4 +1,4 @@
-from . import serializers
+from . import serializers, models
 from rest_framework import viewsets, response
 from drf_stripe.stripe_api.api import stripe_api
 
@@ -36,6 +36,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         try:
+            print('try unsubscribe')
             stripe_api.Subscription.delete(instance.subscription_id)
         except Exception as e:
             print(e, 'subscription delete error')
