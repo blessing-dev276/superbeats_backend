@@ -1,0 +1,14 @@
+{% extends 'server/base.html' %}
+
+{% block content %}
+  <div class="rounded shadow-xl bg-gray-50 p-14 flex flex-col gap-2 items-center">
+    <h1 class="text-lg capitalize text-green-900 font-bold">Verification Code</h1>
+    <p style="font-variant: small-caps;">please use this verification code to activate your account</p>
+    <b class="text-4xl text-gray-600 my-4 underline">{{ code }}</b>
+    <p style="font-variant: small-caps;">if you did not request it, you can ignore this email.</p>
+    <div class="w-full flex flex-col items-start gap-0 text-sm">
+      <span class="capitalize">Welcome Onboard.</span>
+      <span class="capitalize">From Superb Eats.</span>
+    </div>
+  </div>
+{% endblock %}

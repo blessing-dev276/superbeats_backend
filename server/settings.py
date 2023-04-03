@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "storages",
     # my custom apps
     "account.apps.AccountConfig",
+    "custom.apps.CustomConfig",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ ROOT_URLCONF = "server.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "server/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
