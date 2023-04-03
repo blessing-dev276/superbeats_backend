@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "drf_stripe",
     "drf_yasg",
     "storages",
+    # my custom apps
+    "account.apps.AccountConfig",
 ]
 
 MIDDLEWARE = [
