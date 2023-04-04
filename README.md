@@ -24,7 +24,7 @@ and also some environment variables that you have to set, the env file is named 
 - DBHOST
 - DBPASSWORD
 
-Used for sending email to a user, works only in production
+*Used for sending email to a user, works only in production*
 - EMAIL_PORT
 - EMAIL_HOST
 - EMAIL_HOST_USER
@@ -35,11 +35,11 @@ Used for sending email to a user, works only in production
 - AWS_SECRET_ACCESS_KEY
 - AWS_STORAGE_BUCKET_NAME
 
-*For facebook social authentication*
+*Facebook social authentication*
 - SOCIAL_AUTH_FACEBOOK_KEY
 - SOCIAL_AUTH_FACEBOOK_SECRET
 
-For google authentication
+*Google authentication*
 - SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 - SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
 

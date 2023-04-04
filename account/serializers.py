@@ -105,7 +105,10 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile = validated_data.pop("profile", None)
         user = models.User.objects.create_user(**validated_data)
-        profile = ProfileSerializer(user.profile, profile, partial=True)
+        setattr(self.context["request"], "user", user)
+        profile = ProfileSerializer(
+            user.profile, profile, partial=True, context=self.context
+        )
         profile.is_valid(raise_exception=True)
         profile.save()
         return user

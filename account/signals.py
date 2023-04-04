@@ -13,7 +13,7 @@ def create_profile_and_send_otp(sender, instance, created, *args, **kwargs):
         models.Settings.objects.create(user=instance)
 
         if not (instance.is_staff or instance.is_superuser):
-            models.PassCode.objects.create(user=instance)
+            models.Passcode.objects.create(user=instance)
             instance.is_active = False
             instance.save()
 
