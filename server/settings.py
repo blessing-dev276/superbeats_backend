@@ -167,13 +167,14 @@ STATIC_ROOT = BASE_DIR / "static"
 
 # STATICFILES_DIRS = [BASE_DIR / "statics"]
 
-# STATICFILES_STORAGE = (
-#     "django.contrib.staticfiles.storage.StaticFilesStorage"
-#     if DEBUG
-#     else "storages.backends.s3boto3.S3Boto3Storage"
-# )
+STATICFILES_STORAGE = (
+    "django.contrib.staticfiles.storage.StaticFilesStorage"
+    if DEBUG
+    else "storages.backends.s3boto3.S3Boto3Storage"
+    # else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -206,8 +207,6 @@ DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER", str, "")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", str, "")
 
 # custom configuration
-
-MAX_OTP_ROUND = env("MAX_OTP_ROUND", int, 3)
 
 OTP_EXPIRE_MINUTE_TIME = env("OTP_EXPIRE_MINUTE_TIME", int, 5)
 
