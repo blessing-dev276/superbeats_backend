@@ -196,7 +196,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_USE_TLS = True
 
-EMAIL_PORT = ("EMAIL_PORT", int, 587)
+# EMAIL_PORT = ("EMAIL_PORT", Number, 587)
+
+EMAIL_PORT = 587
 
 EMAIL_HOST = env("EMAIL_HOST", str, "localhost")
 
