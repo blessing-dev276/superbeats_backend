@@ -8,7 +8,6 @@ class CategoryAPI(viewsets.ReadOnlyModelViewSet):
     queryset = utils.all_query(models.Category)
     serializer_class = serializers.CategorySerializer
 
-
 class FaqAPI(viewsets.ReadOnlyModelViewSet):
     search_fields = ["name"]
     queryset = utils.all_query(models.Faq)

@@ -71,7 +71,6 @@ def get_or_create_stripe_user(user):
             name=user.get_full_name(),
             phone=user.profile.phone_number if hasattr(user, "profile") else "",
         )
-        print(stripe_user)
         return models.StripeUser.objects.create(user=user, customer_id=stripe_user.id)
     except Exception as e:
         print(e, "user creation failed")
@@ -79,6 +78,7 @@ def get_or_create_stripe_user(user):
 
 
 def email_user(user, title, template_name, context={}):
+    print('sending mail to user')
     if not settings.DEBUG:
         try:
             user.email_user(
