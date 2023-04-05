@@ -78,13 +78,15 @@ def get_or_create_stripe_user(user):
 
 
 def email_user(user, title, template_name, context={}):
-    print('sending mail to user')
+    print('sending mail to user', render_to_string(template_name, context))
     if not settings.DEBUG:
         try:
             user.email_user(
                 title, "", html_message=render_to_string(template_name, context)
             )
+            print('success')
         except Exception as e:
+            print(e, 'send email failed')
             raise ValidationError(str(e))
 
 
