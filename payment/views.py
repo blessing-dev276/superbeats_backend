@@ -22,7 +22,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         try:
-            stripe_api.PaymentMethod.detach(instacne.payment_id)
+            stripe_api.PaymentMethod.detach(instance.payment_id)
         except Exception as e:
             print(e, 'detach payment error')
         instance.delete()

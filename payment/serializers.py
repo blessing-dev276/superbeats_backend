@@ -11,6 +11,7 @@ _user = get_user_model()
 
 class PaymentSerializer(serializers.ModelSerializer):
     cvc = serializers.CharField(write_only=True)
+    brand = serializers.CharField(read_only=True)
     number = serializers.CharField(write_only=True)
     exp_year = serializers.CharField(write_only=True)
     exp_month = serializers.CharField(write_only=True)
@@ -18,7 +19,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Payment
         read_only_fields = 'last4', 'payment_id'
-        fields = 'number', 'exp_month', 'exp_year', 'cvc', 'last4', 'payment_id'
+        fields = 'number', 'exp_month', 'exp_year', 'cvc', 'last4', 'payment_id', 'brand'
 
     def create(self, data):
         user = self.get_user()
@@ -28,7 +29,7 @@ class PaymentSerializer(serializers.ModelSerializer):
                 .attach(payment.id, customer=user.customer_id)
             stripe_api.Customer\
                 .modify(user.customer_id, invoice_settings={'default_payment_method': payment.id})
-            return models.Payment.objects.create(last4=payment.card.last4, payment_id=payment.id, stripe_user=user)
+            return models.Payment.objects.create(last4=payment.card.last4, payment_id=payment.id, stripe_user=user, brand=payment.card.brand)
         except Exception as e:
             print(e, 'serializer create error')
             raise serializers.ValidationError(str(e))
@@ -39,6 +40,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment = stripe_api.PaymentMethod\
                 .modify(instance.payment_id, card=data)
             setattr(instance, 'last4', payment.card.last4)
+            setattr(instance, 'brand', payment.card.brand)
             instance.save()
             return instance
         except Exception as e:
