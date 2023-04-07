@@ -14,3 +14,4 @@ class RecipeCustomPermission(BasePermission):
 
         if not ((subscriptions or obj.plan) or obj.plan):
             return True
+        return True
