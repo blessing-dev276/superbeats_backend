@@ -4,8 +4,6 @@ from django.db.models import Avg, Sum
 from rest_framework import viewsets, mixins, response
 from custom.models import Recent, Rating, Tip, Favorite
 
-# from .permissions import RecipePlanIsAuthenticatedPermission
-
 
 class IngredientAPI(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.IngredientSerializer
@@ -38,7 +36,7 @@ class NutritionAPI(viewsets.ReadOnlyModelViewSet):
 
 
 class RecipeAPI(viewsets.ModelViewSet):
-    # permission_classes = [RecipePlanIsAuthenticatedPermission]
+    search_fields = ["name", "category__name", "type__type"]
     queryset = utils.select_query(models.Recipe, "category", "type", "user")
 
     def get_queryset(self):
@@ -73,6 +71,7 @@ class RecipeAPI(viewsets.ModelViewSet):
 
 class RecipeFavoriteAPI(viewsets.ModelViewSet):
     serializer_class = serializers.RecipeFavoriteSerializer
+    search_fields = ["name", "category__name", "type__type"]
 
     def get_queryset(self):
         return self.request.user.favorites.filter(
@@ -99,13 +98,14 @@ class RecipeFavoriteAPI(viewsets.ModelViewSet):
                 content_type=utils.get_model(models.Recipe),
             )
         except:
-            print('cannot add to fav')
+            print("cannot add to fav")
             ...
         return obj
 
 
 class RecipePlanAPI(viewsets.ModelViewSet):
     serializer_class = serializers.RecipePlanSerializer
+    search_fields = ["name", "category__name", "type__type"]
 
     def get_queryset(self):
         return self.request.user.plan_meals.select_related("recipe")
@@ -227,6 +227,7 @@ class RecipeRecentAPI(viewsets.ReadOnlyModelViewSet):
 
 
 class RecipeTypeAPI(viewsets.ReadOnlyModelViewSet):
+    search_fields = ["type"]
     queryset = utils.all_query(models.RecipeType)
     serializer_class = serializers.RecipeTypeSerializer
 
@@ -242,6 +243,7 @@ class TutorialsAPI(viewsets.ModelViewSet):
 
 
 class TutorialRateAPI(viewsets.ModelViewSet):
+    search_fields = ["name", "category__name"]
     serializer_class = serializers.RecipeRateSerializer
 
     def get_queryset(self):
