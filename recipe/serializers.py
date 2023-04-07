@@ -16,8 +16,8 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class InstructionSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = "__all__"
         model = models.Instruction
+        fields = ["image", "description"]
         extra_kwargs = {"recipe": {"read_only": True}}
 
 
@@ -31,6 +31,7 @@ class NutritionSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
     reviewed = serializers.SerializerMethodField()
+    nutritions = NutritionSerializer(many=True, default=None, write_only=True)
     ingredients = IngredientSerializer(many=True, default=None, write_only=True)
     instructions = InstructionSerializer(many=True, default=None, write_only=True)
 
@@ -42,19 +43,26 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = self.Meta.model
         validated_data["user"] = self.context["request"].user
 
+        nutritions = validated_data.pop("nutritions", None)
         ingredients = validated_data.pop("ingredients", None)
         instructions = validated_data.pop("instructions", None)
 
         recipe = model.objects.create(**validated_data)
+
         if ingredients:
-            ingredients = IngredientSerializer(None, ingredients, many=True)
+            ingredients = IngredientSerializer(data=ingredients, many=True)
             ingredients.is_valid(raise_exception=True)
             ingredients.save(recipe=recipe)
 
         if instructions:
-            instructions = IngredientSerializer(None, instructions, many=True)
+            instructions = InstructionSerializer(data=instructions, many=True)
             instructions.is_valid(raise_exception=True)
             instructions.save(recipe=recipe)
+
+        if nutritions:
+            nutritions = NutritionSerializer(data=nutritions, many=True)
+            nutritions.is_valid(raise_exception=True)
+            nutritions.save(recipe=recipe)
         return recipe
 
     def get_reviewed(self, model):
@@ -70,7 +78,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeDetailSerializer(RecipeSerializer):
-    nutritions = NutritionSerializer(many=True)
+    nutritions = NutritionSerializer(many=True, read_only=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
     instructions = InstructionSerializer(many=True, read_only=True)
 
