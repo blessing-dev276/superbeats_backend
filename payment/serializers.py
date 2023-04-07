@@ -71,7 +71,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
     class Meta:
         model = m.Subscription
         read_only_fields = "subscription_id", "status"
-        fields = "price_id", "subscription_id", "status", "trial"
+        fields = "price_id", "subscription_id", "status"
 
     def create(self, data):
         price = data.pop("price_id")

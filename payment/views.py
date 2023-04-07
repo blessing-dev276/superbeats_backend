@@ -32,7 +32,10 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SubscribeSerializer
 
     def get_queryset(self):
-        return self.request.user.stripe_user.subscriptions.all()
+        try:
+            return self.request.user.stripe_user.subscriptions.all()
+        except:
+            return []
 
     def perform_destroy(self, instance):
         try:

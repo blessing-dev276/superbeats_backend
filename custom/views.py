@@ -20,7 +20,10 @@ class GalleryAPI(viewsets.ModelViewSet):
     serializer_class = serializers.GallerySerializer
 
     def get_queryset(self):
-        return self.request.user.galleries.all() or []
+        try:
+            return self.request.user.galleries.all()
+        except:
+            return []
 
 
 class NotificationAPI(viewsets.ReadOnlyModelViewSet):
@@ -28,7 +31,10 @@ class NotificationAPI(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.NotificationSerializer
 
     def get_queryset(self):
-        return self.request.user.notifications.all() or []
+        try:
+            return self.request.user.notifications.all()
+        except:
+            return []
 
     def get_object(self):
         model = super().get_object()
