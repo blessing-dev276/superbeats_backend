@@ -66,12 +66,13 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 
 class SubscribeSerializer(serializers.ModelSerializer):
+    price = serializers.SerializerMethodField()
     price_id = serializers.CharField(write_only=True)
 
     class Meta:
         model = m.Subscription
-        read_only_fields = "subscription_id", "status"
-        fields = "price_id", "subscription_id", "status"
+        read_only_fields = "subscription_id", "status", "price"
+        fields = "price_id", "subscription_id", "status", "price"
 
     def create(self, data):
         price = data.pop("price_id")
@@ -126,6 +127,16 @@ class SubscribeSerializer(serializers.ModelSerializer):
             }
         )
         print(obj, "after update")
+
+    def get_price(self, model):
+        try:
+            sub = stripe_api.Subscription.retrieve(model.subscription_id)
+            subscription_object = sub["items"]["data"][0]["price"]
+            return subscription_object["id"]  # returns the price id
+            return subscription_object["product"]  # returns the product id
+        except Exception as e:
+            # print(e)
+            return None
 
     def get_user(self):
         user = self.context["request"].user

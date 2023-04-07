@@ -1,6 +1,7 @@
 from server import utils
 from . import models, serializers
 from django.db.models import Avg, Sum
+from .permissions import RecipeCustomPermission
 from rest_framework import viewsets, mixins, response
 from custom.models import Recent, Rating, Tip, Favorite
 
@@ -36,6 +37,7 @@ class NutritionAPI(viewsets.ReadOnlyModelViewSet):
 
 
 class RecipeAPI(viewsets.ModelViewSet):
+    permission_classes = [RecipeCustomPermission]
     search_fields = ["name", "category__name", "type__type"]
     queryset = utils.select_query(models.Recipe, "category", "type", "user")
 
@@ -51,7 +53,6 @@ class RecipeAPI(viewsets.ModelViewSet):
 
     def get_object(self):
         obj = super().get_object()
-        print(obj)
         try:
             Recent.objects.get(
                 user=self.request.user,
@@ -127,7 +128,6 @@ class RecipeHotAPI(viewsets.ReadOnlyModelViewSet):
 
     def get_object(self):
         obj = super().get_object()
-        print(obj)
         try:
             Recent.objects.get(
                 user=self.request.user,
