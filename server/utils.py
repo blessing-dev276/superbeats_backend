@@ -77,14 +77,16 @@ def get_or_create_stripe_user(user):
         raise ValidationError({"detail": str(e)})
 
 
-def email_user(user, title = "", template_name = "", context={}):
-    print('sending mail to user')
+def email_user(user, title="", template_name="", context={}):
+    print("sending mail to user")
     if not settings.DEBUG:
         try:
-            user.email_user(title, "", html_message=render_to_string(template_name, context))
-            print('success')
+            user.email_user(
+                title, "", html_message=render_to_string(template_name, context)
+            )
+            print("success")
         except Exception as e:
-            print(e, 'send email failed')
+            print(e, "send email failed")
             raise ValidationError(e)
 
 

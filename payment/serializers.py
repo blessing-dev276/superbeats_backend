@@ -45,8 +45,7 @@ class PaymentSerializer(serializers.ModelSerializer):
                 brand=payment.card.brand,
             )
         except Exception as e:
-            print(e, "serializer create error")
-            raise serializers.ValidationError(str(e))
+            raise serializers.ValidationError({"detail": str(e)})
 
     def update(self, instance, data):
         user = self.get_user()
@@ -57,12 +56,16 @@ class PaymentSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
         except Exception as e:
-            print(e, "serializer update error")
-            raise serializers.ValidationError(str(e))
+            raise serializers.ValidationError({"detail": str(e)})
 
     def get_user(self):
         user = self.context["request"].user
         return utils.get_or_create_stripe_user(user)
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = m.Product
+        fields = '__all__'
 
 
 class SubscribeSerializer(serializers.ModelSerializer):
@@ -85,7 +88,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
             return m.Subscription.objects.create(**data)
         except Exception as e:
             print(e, "cause of create subscription error")
-            raise serializers.ValidationError(str(e))
+            raise serializers.ValidationError({"detail": str(e)})
 
     def update(self, instance, data):
         price = data.pop("price_id")
@@ -96,9 +99,26 @@ class SubscribeSerializer(serializers.ModelSerializer):
             self.save_attributes(instance, subscription)
             return super().update(instance, data)
         except Exception as e:
-            raise serializers.ValidationError(str(e))
+            raise serializers.ValidationError({"detail": str(e)})
 
     def save_attributes(self, obj, data, set_user=False):
+        # short = (
+        #     lambda obj, attr: datetime.fromtimestamp(getattr(obj, attr))
+        #     if getattr(obj, attr)
+        #     else None
+        # )
+        # obj.update(
+        #     {
+        #         "ended_at": short(data, "ended_at"),
+        #         "cencel_at": short(data, "cencel_at"),
+        #         "trial_end": short(data, "trial_end"),
+        #         "status": getattr(data, "status", None),
+        #         "trial_start": short(data, "trial_start"),
+        #         "subscription_id": getattr(data, "id", None),
+        #         "period_end": short(data, "current_period_end"),
+        #         "period_start": short(data, "current_period_start"),
+        #     }
+        # )
         if set_user:
             obj.update({"stripe_user": self.get_user()})
         obj.update(
@@ -126,7 +146,6 @@ class SubscribeSerializer(serializers.ModelSerializer):
                 else None,
             }
         )
-        print(obj, "after update")
 
     def get_price(self, model):
         try:
@@ -135,7 +154,6 @@ class SubscribeSerializer(serializers.ModelSerializer):
             return subscription_object["id"]  # returns the price id
             return subscription_object["product"]  # returns the product id
         except Exception as e:
-            # print(e)
             return None
 
     def get_user(self):
