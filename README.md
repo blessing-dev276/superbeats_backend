@@ -14,7 +14,7 @@ Before cloning and using this service, there are software that you have to have 
 
 and also some environment variables that you have to set, the env file is named **.env** inside the server folder, they are
 
-- DEBUG - required in production
+- DEBUG - required in development
 - DOMAIN_NAME - only required in development
 
 *Below are only required if DEBUG is set to false*
