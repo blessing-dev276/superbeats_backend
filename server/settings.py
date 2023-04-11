@@ -111,7 +111,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "server/db.sqlite3",
     }
-    if DEBUG
+    if env("DEBUG", bool, False)
     else {
         "NAME": env("DBNAME", str, ""),
         "PORT": env("DBPORT", str, ""),
@@ -121,7 +121,6 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -153,7 +152,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -169,18 +167,14 @@ STATIC_ROOT = BASE_DIR / "static"
 
 STATICFILES_STORAGE = (
     "django.contrib.staticfiles.storage.StaticFilesStorage"
-    if DEBUG
+    if env("DEBUG", bool, False)
     else "storages.backends.s3boto3.S3Boto3Storage"
-    # else "whitenoise.storage.CompressedManifestStaticFilesStorage"
 )
-
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 # session
 
